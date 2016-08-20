@@ -1,0 +1,39 @@
+- days_difference = DateTime.now.wday - 1
+- monday = DateTime.now - days_difference.days
+- friday = monday + 4.days
+.col-md-8
+  h3 List of schedules made for the resources by users during the below given week.
+  = "#{monday.strftime("%d-%m-%Y")} to #{friday.strftime("%d-%m-%Y")} week"
+.col-md-4
+  = button_tag "Book a resource", 'type' => :button, 'id' => :bookResource,\
+    'class' => 'top-margin-25 btn btn-primary btn-lg', 'data-toggle' => 'modal', 'data-target' => '#bookResourceModal'
+= render 'book_resource_modal', users: users
+.col-md-8
+  table.table.table-striped
+    thead
+      tr
+        th Date - Day
+        th Resource Name
+        th User Name
+        th VCON requirement
+        th Closest requirement
+        th Double resource requirement
+        th From
+        th To
+        th
+    tbody
+      - days = (monday..friday).map{ |day| day.strftime("%d-%m-%Y") }
+      - resource_usages.each do |resource_usage|
+        - usage_from_time = DateTime.strptime resource_usage.from_time.to_s, '%s'
+        /- usage_from_time = usage_from_time.change(:offset => Time.now.zone)
+        /- if days.include? usage_from_time.strftime("%d-%m-%Y")
+        tr
+            td = usage_from_time.strftime("%d-%m-%Y - %a")
+            td = resource_usage.resource.name
+            td = resource_usage.user.name
+            td = to_yes_no resource_usage.require_vcon
+            td = to_yes_no resource_usage.require_min_distance
+            td = to_yes_no resource_usage.require_double_resource
+            td = to_time_str resource_usage.from_time
+            td = to_time_str resource_usage.to_time
+            td

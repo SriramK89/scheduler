@@ -1,0 +1,19 @@
+.content {
+  padding-top: 51px;
+}
+
+.top-margin-25 {
+  margin-top: 25px;
+}
+
+.error-div {
+  background-color: #ffbbbb;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 7px 15px 2px;
+}
+
+.red-text {
+  color: #ff0000;
+}

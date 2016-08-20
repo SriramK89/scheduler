@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    title Scheduler
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  body
+    .container
+      .row
+        .navbar.navbar-inverse.navbar-fixed-top
+          .container
+            .navbar-header
+              button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#scheduler-navbar-collapse-1" aria-expanded="false"
+                span class="sr-only"Toggle navigation
+                span class="icon-bar"
+                span class="icon-bar"
+                span class="icon-bar"
+              a class="navbar-brand" href="#{root_path}" Home
+            .collapse.navbar-collapse#scheduler-navbar-collapse-1
+              ul.nav.navbar-nav
+                li
+                  = link_to "Manage resources", resources_path
+                li
+                  = link_to "Manage users", users_path
+                li
+                  = link_to "Manage distances", resourceuserdistances_path
+      .content
+        .span9 = yield

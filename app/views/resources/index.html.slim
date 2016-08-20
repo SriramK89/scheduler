@@ -1,0 +1,14 @@
+h3 List of resources in the system.
+.col-md-5
+  table.table.table-striped
+    thead
+      tr
+        th Resource Name
+        th Tagged with Resource
+        th
+    tbody
+      - resources.each do |resource|
+        tr
+          td = resource.name
+          td = get_pair_resource resource
+          td

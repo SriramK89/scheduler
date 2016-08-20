@@ -1,0 +1,16 @@
+h3 List of distances between resources and users in the system.
+.col-md-5
+  table.table.table-striped
+    thead
+      tr
+        th Resource Name
+        th User Name
+        th Distance
+        th
+    tbody
+      - resource_user_distances.each do |resource_user_distance|
+        tr
+          td = resource_user_distance.resource.name
+          td = resource_user_distance.user.name
+          td = resource_user_distance.distance
+          td

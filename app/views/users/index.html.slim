@@ -1,0 +1,14 @@
+h3 List of users in the system.
+.col-md-5
+  table.table.table-striped
+    thead
+      tr
+        th User Name
+        th Priority
+        th
+    tbody
+      - users.each do |user|
+        tr
+          td = user.name
+          td = user.priority
+          td

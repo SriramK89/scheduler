@@ -1,0 +1,2 @@
+module ResourceuserdistancesHelper
+end
