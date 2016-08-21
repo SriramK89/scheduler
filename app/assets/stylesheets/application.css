@@ -12,4 +12,9 @@
  *
  *= require_tree .
  *= require_self
+ *= require dhtmlxCalendar_v50_std/codebase/dhtmlxcalendar
+ *= require dhtmlxCalendar_v50_std/codebase/fonts/font_roboto/roboto
+ *= require dhtmlxCalendar_v50_std/skins/skyblue/dhtmlxcalendar
+ *= require dhtmlxCalendar_v50_std/skins/web/dhtmlxcalendar
+ *= require dhtmlxCalendar_v50_std/skins/terrace/dhtmlxcalendar
  */

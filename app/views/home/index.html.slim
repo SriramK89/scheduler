@@ -1,39 +1,67 @@
 - days_difference = DateTime.now.wday - 1
 - monday = DateTime.now - days_difference.days
 - friday = monday + 4.days
+- booking_datetime = DateTime.now
+- if booking_datetime.wday == 6
+  - booking_datetime = booking_datetime + 2.days
+- elsif booking_datetime.wday == 0
+  - booking_datetime = booking_datetime + 1.day
 .col-md-8
   h3 List of schedules made for the resources by users during the below given week.
   = "#{monday.strftime("%d-%m-%Y")} to #{friday.strftime("%d-%m-%Y")} week"
-.col-md-4
-  = button_tag "Book a resource", 'type' => :button, 'id' => :bookResource,\
-    'class' => 'top-margin-25 btn btn-primary btn-lg', 'data-toggle' => 'modal', 'data-target' => '#bookResourceModal'
-= render 'book_resource_modal', users: users
-.col-md-8
-  table.table.table-striped
-    thead
-      tr
-        th Date - Day
-        th Resource Name
-        th User Name
-        th VCON requirement
-        th Closest requirement
-        th Double resource requirement
-        th From
-        th To
-        th
-    tbody
-      - days = (monday..friday).map{ |day| day.strftime("%d-%m-%Y") }
-      - resource_usages.each do |resource_usage|
-        - usage_from_time = DateTime.strptime resource_usage.from_time.to_s, '%s'
-        /- usage_from_time = usage_from_time.change(:offset => Time.now.zone)
-        /- if days.include? usage_from_time.strftime("%d-%m-%Y")
-        tr
-            td = usage_from_time.strftime("%d-%m-%Y - %a")
-            td = resource_usage.resource.name
-            td = resource_usage.user.name
-            td = to_yes_no resource_usage.require_vcon
-            td = to_yes_no resource_usage.require_min_distance
-            td = to_yes_no resource_usage.require_double_resource
-            td = to_time_str resource_usage.from_time
-            td = to_time_str resource_usage.to_time
-            td
+  .scrollable
+    - if resource_usages.count == 0
+      | There are no schedules for this week.
+    - else
+      table.table.table-striped
+        thead
+          tr
+            th Date - Day
+            th Resource Name
+            th User Name
+            th VCON requirement
+            th Closest requirement
+            th Double resource requirement
+            th From
+            th To
+            th
+        tbody
+          - days = (monday..friday).map{ |day| day.strftime('%d-%m-%Y') }
+          - resource_usages.each do |resource_usage|
+            - usage_from_time = Time.zone.at resource_usage.from_time
+            - if days.include?(usage_from_time.strftime('%d-%m-%Y'))
+              tr
+                  td = usage_from_time.strftime('%d-%m-%Y - %a')
+                  td = get_pair resource_usage
+                  td = resource_usage.user.name
+                  td = to_yes_no resource_usage.require_vcon
+                  td = to_yes_no resource_usage.require_min_distance
+                  td = to_yes_no resource_usage.require_double_resource
+                  td = to_time_str resource_usage.from_time
+                  td = to_time_str resource_usage.to_time
+                  td
+.col-md-4.scrollable.top-margin-25
+  h4 Book a resource
+  .col-md-12#bookingErrorSection
+  .col-md-10
+    = label_tag :bookingLabel, 'Choose the user:', class: 'col-md-8'
+    = select_tag :user_id, options_for_select(get_users(users)), id: :bookingUserId
+  .col-md-10
+    = label_tag :bookingLabel, 'VCON facility', class: 'col-md-8'
+    = check_box 'vcon', 'required', { id: :bookingVCONReq }
+  /.col-md-10
+    = label_tag :bookingLabel, 'Check if you need the resource near to you', class: 'col-md-8'
+    = check_box 'near', 'required', { id: :bookingNearReq }
+  .col-md-10
+    = label_tag :bookingLabel, 'Double resource', class: 'col-md-8'
+    = check_box 'double_resource', 'required', { id: :bookingDoubleResourceReq }
+  .col-md-10
+    = label_tag :bookingLabel, 'Choose the time interval', class: 'col-md-8'
+  .col-md-10
+    = label_tag :bookingLabel, 'From Date and Time', class: 'col-md-8'
+    = text_field :booking, :from_date, id: :bookingFromDate, readonly: true, size: 15
+  .col-md-10
+    = label_tag :bookingLabel, 'To Date and Time', class: 'col-md-8'
+    = text_field :booking, :to_date, id: :bookingToDate, readonly: true, size: 15
+  button.btn.btn-error#bookingCancel type='reset' data-dismiss='modal' Reset
+  button.btn.btn-primary#bookingSubmit type='submit' data-url=resourceusages_path Book

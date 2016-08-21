@@ -14,4 +14,6 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
+//= require dhtmlxCalendar_v50_std/sources/dhtmlxCommon/codebase/dhtmlxcommon.js
+//= require dhtmlxCalendar_v50_std/sources/dhtmlxCalendar/codebase/dhtmlxcalendar.js
 //= require_tree .

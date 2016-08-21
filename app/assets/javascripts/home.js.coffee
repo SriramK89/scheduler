@@ -8,21 +8,15 @@ Scheduler.Home = do ->
     vcon = $('#bookingVCONReq').is(':checked')
     near = $('#bookingNearReq').is(':checked')
     double_res = $('#bookingDoubleResourceReq').is(':checked')
-    from_hrs = $('#bookingFromHrs').val()
-    from_mins = $('#bookingFromMins').val()
-    from_am_pm = $('#bookingFromAMPM').val()
-    to_hrs = $('#bookingToHrs').val()
-    to_mins = $('#bookingToMins').val()
-    to_am_pm = $('#bookingToAMPM').val()
-    date = $('#bookingDate').val()
+    from_date = $('#bookingFromDate').val()
+    to_date = $('#bookingToDate').val()
     $.ajax(
         url: $(@).data('url'),
         type: 'POST',
         dataType: 'json',
         data: { usage: { user_id: user_id, vcon: vcon, near: near,\
-                        near: near, double_res: double_res, from_hrs: from_hrs,\
-                        from_mins: from_mins, from_am_pm: from_am_pm, to_hrs: to_hrs,\
-                        to_mins: to_mins, to_am_pm: to_am_pm, date: date } }
+                        near: near, double_res: double_res,\
+                        from_date: from_date, to_date: to_date } }
         success: _handleBookingSuccess
       )
 
@@ -36,19 +30,37 @@ Scheduler.Home = do ->
       $('#bookingErrorSection').html(data.content)
 
   _handleBookingCancel = (event) ->
-    _resetFormItems
+    _resetFormItems()
 
   _resetFormItems = ->
     $('#bookingUserId').val(1)
     $('#bookingVCONReq').attr('checked', false)
     $('#bookingNearReq').attr('checked', false)
     $('#bookingDoubleResourceReq').attr('checked', false)
-    $('#bookingFromHrs').val(1)
-    $('#bookingFromMins').val(0)
-    $('#bookingFromAMPM').val(1)
-    $('#bookingToHrs').val(1)
-    $('#bookingToMins').val(0)
-    $('#bookingToAMPM').val(1)
+    date = Scheduler.Home.formatDateTime(new Date())
+    $('#bookingFromDate').val(date)
+    $('#bookingToDate').val(date)
+
+  formatDateTime: (date) ->
+    d = date.getDate()
+    m = date.getMonth() + 1
+    y = date.getFullYear()
+    hr = date.getHours()
+    min = date.getMinutes()
+    if m <= 9
+      m = '0' + m
+    if d <= 9
+      d = '0' + d
+    if hr < 12
+      ampm = 'AM'
+    else
+      hr = hr - 12
+      ampm = 'PM'
+    if hr <= 9
+      hr = '0' + hr
+    if min <= 9
+      min = '0' + min
+    return "#{y}-#{m}-#{d} #{hr}:#{min}#{ampm}"
 
   init: ->
     _resetFormItems()

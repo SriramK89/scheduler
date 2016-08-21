@@ -14,6 +14,6 @@ class ResourceusagesController < ApplicationController
   private
     def usage_params
       params.require(:usage).permit(:user_id, :vcon, :near, :near, :double_res,
-        :from_hrs, :from_mins, :from_am_pm, :to_hrs, :to_mins, :to_am_pm, :date)
+        :from_date, :to_date)
     end
 end

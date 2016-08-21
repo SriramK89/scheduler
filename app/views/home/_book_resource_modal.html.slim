@@ -1,7 +1,7 @@
 - booking_datetime = DateTime.now
 - if booking_datetime.wday == 6
   - booking_datetime = booking_datetime + 2.days
-- elsif booking_datetime.wday == 7
+- elsif booking_datetime.wday == 0
   - booking_datetime = booking_datetime + 1.day
 .modal.fade id='bookResourceModal' tabindex='-1' role='dialog' aria-labelledby='bookResourceModalLabel'
   .modal-dialog role='document'
@@ -27,6 +27,7 @@
         .col-md-10
           = label_tag :bookingLabel, "Booking done for #{booking_datetime.strftime("%d-%m-%Y (%a)")}", class: 'col-md-8'
           = hidden_field_tag :bookingDate, booking_datetime.strftime("%Y-%m-%d")
+          = text_field :booking, :date, id: :bookingDatePicker
         .col-md-10
           = label_tag :bookingLabel, "Choose the reservation time interval", class: 'col-md-8'
         .col-md-10
