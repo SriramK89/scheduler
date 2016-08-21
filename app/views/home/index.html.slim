@@ -1,45 +1,9 @@
-- days_difference = DateTime.now.wday - 1
-- monday = DateTime.now - days_difference.days
-- friday = monday + 4.days
-- booking_datetime = DateTime.now
-- if booking_datetime.wday == 6
-  - booking_datetime = booking_datetime + 2.days
-- elsif booking_datetime.wday == 0
-  - booking_datetime = booking_datetime + 1.day
+- days_difference = Time.zone.now.wday - 1
+- monday = Time.zone.now.to_datetime - days_difference.days
 .col-md-8
   h3 List of schedules made for the resources by users during the below given week.
-  = "#{monday.strftime("%d-%m-%Y")} to #{friday.strftime("%d-%m-%Y")} week"
-  .scrollable
-    - if resource_usages.count == 0
-      | There are no schedules for this week.
-    - else
-      table.table.table-striped
-        thead
-          tr
-            th Date - Day
-            th Resource Name
-            th User Name
-            th VCON requirement
-            th Closest requirement
-            th Double resource requirement
-            th From
-            th To
-            th
-        tbody
-          - days = (monday..friday).map{ |day| day.strftime('%d-%m-%Y') }
-          - resource_usages.each do |resource_usage|
-            - usage_from_time = Time.zone.at resource_usage.from_time
-            - if days.include?(usage_from_time.strftime('%d-%m-%Y'))
-              tr
-                  td = usage_from_time.strftime('%d-%m-%Y - %a')
-                  td = get_pair resource_usage
-                  td = resource_usage.user.name
-                  td = to_yes_no resource_usage.require_vcon
-                  td = to_yes_no resource_usage.require_min_distance
-                  td = to_yes_no resource_usage.require_double_resource
-                  td = to_time_str resource_usage.from_time
-                  td = to_time_str resource_usage.to_time
-                  td
+  = select_tag :week_selector, options_for_select(get_four_weeks(monday)), 'id' => :listWeekSelect, 'data-url' => resourceusages_path
+  .scrollable#loadingUsageBox
 .col-md-4.scrollable.top-margin-25
   h4 Book a resource
   .col-md-12#bookingErrorSection

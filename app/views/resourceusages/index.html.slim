@@ -1,0 +1,30 @@
+- if resource_usages.count == 0
+  p
+    b There are no schedules for this week.
+- else
+  - friday = monday + 4.days
+  table.table.table-striped
+    thead
+      tr
+        th Resource Name(s)
+        th User Name
+        th VCON requirement
+        th Closest requirement
+        th Double resource requirement
+        th From
+        th To
+        th
+    tbody
+      - days = (monday..friday).map{ |day| day.strftime('%d-%m-%Y') }
+      - resource_usages.each do |resource_usage|
+        - usage_from_time = Time.zone.at resource_usage.from_time
+        - if days.include?(usage_from_time.strftime('%d-%m-%Y'))
+          tr
+              td = get_pair resource_usage
+              td = resource_usage.user.name
+              td = to_yes_no resource_usage.require_vcon
+              td = to_yes_no resource_usage.require_min_distance
+              td = to_yes_no resource_usage.require_double_resource
+              td = convert_to_time_str resource_usage.from_time
+              td = convert_to_time_str resource_usage.to_time
+              td

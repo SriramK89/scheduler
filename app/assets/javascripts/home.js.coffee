@@ -25,9 +25,24 @@ Scheduler.Home = do ->
       alert data.content
       $('#bookingErrorSection').html('')
       _resetFormItems()
-      location.reload()
+      _callToLoadUsages()
     else
       $('#bookingErrorSection').html(data.content)
+
+  _handleListWeekSelect = (event) ->
+    _callToLoadUsages()
+
+  _callToLoadUsages = ->
+    $.ajax(
+        url: $('#listWeekSelect').data('url'),
+        type: 'GET',
+        dataType: 'json',
+        data: { date: { from_date: $('#listWeekSelect').val() } }
+        success: _loadUsages
+      )
+
+  _loadUsages = (data) ->
+    $('#loadingUsageBox').html(data.content)
 
   _handleBookingCancel = (event) ->
     _resetFormItems()
@@ -64,5 +79,7 @@ Scheduler.Home = do ->
 
   init: ->
     _resetFormItems()
+    _callToLoadUsages()
     $('#bookingSubmit').click(_handleBookingSubmit)
     $('#bookingCancel').click(_handleBookingCancel)
+    $('#listWeekSelect').change(_handleListWeekSelect)

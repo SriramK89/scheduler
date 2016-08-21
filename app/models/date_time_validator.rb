@@ -6,10 +6,17 @@ class DateTimeValidator < ActiveModel::Validator
       if (from_time.wday == 6 || from_time.wday == 0) ||
         (to_time.wday == 6 || to_time.wday == 0)
 
-        usage_record.errors.add(:base, "No reservations on weekends")
+        usage_record.errors.add(:base, 'No reservations on weekends')
       end
       if from_time >= to_time
-        usage_record.errors.add(:base, "Time interval must be atleast 1 minute")
+        usage_record.errors.add(:base, 'Beginning date and time must be before ending date and time')
+      end
+      this_date = Time.zone.now
+      if (this_date + 4.weeks) < to_time
+        usage_record.errors.add(:base, 'Reservation can be made only within a month(4 weeks)')
+      end
+      if this_date > from_time
+        usage_record.errors.add(:base, 'Reservation cannot be made for past')
       end
     end
   end

@@ -3,9 +3,9 @@ module HomeHelper
     bool_value ? "Yes" : "No"
   end
 
-  def to_time_str datetime_int_value
+  def convert_to_time_str datetime_int_value
     datetime_value = Time.zone.at datetime_int_value
-    datetime_value.strftime("%I:%M %p")
+    datetime_value.strftime("%d-%m-%Y %I:%M %p")
   end
 
   def get_users users
@@ -22,5 +22,19 @@ module HomeHelper
     else
       resource_usage.resource.name
     end
+  end
+
+  def get_four_weeks monday
+    options = []
+    start_monday = monday
+    puts ''
+    while start_monday <= (monday + 4.weeks)
+      end_friday = start_monday + 4.days
+      options << ["#{start_monday.strftime('%d-%m-%Y')} - #{end_friday.strftime('%d-%m-%Y')}", start_monday.strftime('%Y-%m-%d')]
+      start_monday += 1.week
+    end
+    puts options.inspect
+    puts ''
+    return options
   end
 end
